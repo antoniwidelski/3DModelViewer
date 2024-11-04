@@ -4,7 +4,8 @@
 
 static bool s_Initialized = false;
 
-Window* Window::CreateWindow(int width, int height)
+
+Window* Window::CreateWindow(int width, int height) 
 {
 	if (!s_Initialized)
 	{
@@ -37,7 +38,7 @@ void Window::Update(double deltaTime)
 }
 
 
-Window::Window(int width, int height)
+Window::Window(int width, int height) : m_Width(width), m_Height(height)
 {
 	if (glfwInit() == 0)
 	{
@@ -58,6 +59,7 @@ Window::Window(int width, int height)
 	}
 
 	glfwMakeContextCurrent(m_Window);
+	glfwSetWindowUserPointer(m_Window, this);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -67,7 +69,56 @@ Window::Window(int width, int height)
 
 	glViewport(0, 0, width, height);
 
+	glfwSetKeyCallback(m_Window, KeyCallback);
+	glfwSetMouseButtonCallback(m_Window, MouseButtonCallback);
+	glfwSetCursorPosCallback(m_Window, CursorPosCallback);
 
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	s_Initialized = true;
+}
+
+void Window::SetKeyCallback(const std::function<void(int, int)>& callback)
+{
+	m_KeyCallback = callback;
+}
+
+void Window::SetMouseButtonCallback(const std::function<void(int, int, int)> callback)
+{
+	m_MouseButtonCallback = callback;
+}
+
+void Window::SetCursorPosCallback(const std::function<void(double, double)> callback)
+{
+	m_CursorPosCallback = callback;
+}
+
+void Window::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (win && win->m_KeyCallback)
+	{
+		win->m_KeyCallback(key, action);
+	}
+}
+
+void Window::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (win && win->m_MouseButtonCallback)
+	{
+		win->m_MouseButtonCallback(button, action, mods);
+	}
+}
+
+void Window::CursorPosCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (win && win->m_CursorPosCallback)
+	{
+		win->m_CursorPosCallback(xPos, yPos);
+	}
 }

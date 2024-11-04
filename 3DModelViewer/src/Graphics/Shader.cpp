@@ -1,5 +1,14 @@
 #include "Shader.h"
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+
+#include "glm/gtc/type_ptr.hpp"
+
 Shader::Shader(const char* vSource, const char* fSource)
 {
 	unsigned int vShader = CreateShader(vSource, GL_VERTEX_SHADER);
@@ -11,6 +20,51 @@ Shader::Shader(const char* vSource, const char* fSource)
 	glDeleteShader(fShader);
 }
 
+Shader::Shader(const std::string& vPath, const std::string& fPath)
+{
+	std::string vStr = LoadFromFile(vPath);
+	std::string fStr = LoadFromFile(fPath);
+
+	const char* vSource = vStr.c_str();
+	const char* fSource = fStr.c_str();
+
+	unsigned int vShader = CreateShader(vSource, GL_VERTEX_SHADER);
+	unsigned int fShader = CreateShader(fSource, GL_FRAGMENT_SHADER);
+
+	m_ID = CreateProgram(vShader, fShader);
+
+	glDeleteShader(vShader);
+	glDeleteShader(fShader);
+}
+
+std::string Shader::LoadFromFile(const std::string& path)
+{
+	std::ifstream file(path);
+	std::stringstream ss;
+
+	ss << file.rdbuf();
+
+	file.close();
+	return ss.str();
+}
+
+void Shader::SetUniformMat4(const std::string& name, glm::mat4 mat) const
+{
+	unsigned int loc = glGetUniformLocation(m_ID, name.c_str());
+	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void Shader::SetUniformFloat(const std::string& name, float value) const
+{
+	unsigned int loc = glGetUniformLocation(m_ID, name.c_str());
+	glUniform1f(loc, value);
+}
+
+void Shader::SetUniformInt(const std::string& name, int value) const
+{
+	unsigned int loc = glGetUniformLocation(m_ID, name.c_str());
+	glUniform1i(loc, value);
+}
 
 unsigned int Shader::CreateShader(const char* source, GLenum shaderType)
 {
@@ -22,7 +76,7 @@ unsigned int Shader::CreateShader(const char* source, GLenum shaderType)
 	if (infoLog != "")
 	{
 		std::string type = (shaderType == GL_VERTEX_SHADER) ? "VERTEX" : "FRAGMENT";
-		std::cout << "ERROR::SHADER::" << type << "COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::" << type << "::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	return shader;

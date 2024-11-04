@@ -6,16 +6,22 @@
 #include "glm/glm.hpp"
 #include "glad/glad.h"
 
-#include "VertexArray.h"
-#include "IndexBuffer.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class Renderer
 {
 public:
-	void SetClearColor(float r, float g, float b) const;
+	Renderer();
+
 	void Clear() const;
-	void Render(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+	//void Draw(const Model& model, const Shader& shader) const;
+	//void Draw(const Mesh& mesh, const Shader& shader) const;
+
+	void SetClearColor(float r, float g, float b) const;
+	void SetTexture(const Texture& tex, const Shader& shader);
+
+	bool first = true;
 };
 
 #endif
