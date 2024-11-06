@@ -8,8 +8,8 @@
 #include "../Graphics/Shader.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Model.h"
+#include "../Graphics/Light.h"
 
-#include "../vendor/stb_image.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -49,9 +49,17 @@ void Application::Run()
 
 	shader.Use();
 	glm::mat4 projection = glm::perspective(m_Camera.GetFOV(), m_Window->GetAspect(), 0.1f, 100.0f);
-	shader.SetUniformMat4("projection", projection);
+	shader.SetMat4("projection", projection);
+
+	glm::vec3 lightDir(-0.2f, -1.0f, -0.3f);
+	glm::vec3 ambient(0.2f, 0.2f, 0.2f);
+	glm::vec3 diffuse(0.5f, 0.5f, 0.5f);
+	glm::vec3 specular(1.0f, 1.0f, 1.0f);
+	Light light(lightDir, ambient, diffuse, specular);
 
 	Renderer renderer;
+
+	
 
 	// loop
 	while (!m_Window->GetShouldClose())
@@ -63,13 +71,13 @@ void Application::Run()
 		renderer.SetClearColor(0.8f, 0.2f, 0.5f);
 		renderer.Clear();
 
+		light.Update(shader, m_Camera.GetPosition());
+		shader.SetFloat("shininess", 32.0f);
+
 		glm::mat4 model(1.0f);
-
-		shader.SetUniformMat4("model", model);
-
+		shader.SetMat4("model", model);
 		m_Camera.ManageKeyInput(m_Keys, deltaTime);
-
-		shader.SetUniformMat4("view", m_Camera.GetViewMatrix());
+		shader.SetMat4("view", m_Camera.GetViewMatrix());
 
 		_model.Draw(shader);
 

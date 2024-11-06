@@ -30,8 +30,6 @@ public:
 private:
 	unsigned int VAO, VBO, EBO;
 
-
-
 	void setupMesh();
 };
 
@@ -58,15 +56,12 @@ void Mesh::setupMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-	// vertex position
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-	// vertex normals
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 	glEnableVertexAttribArray(1);
 
-	// vertex texture coords
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 	glEnableVertexAttribArray(2);
 
@@ -79,8 +74,7 @@ void Mesh::Draw(Shader& shader)
 	unsigned int specularNr = 1;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE + i); // activate texture unit first
-		// retrieve texture number (the N in diffuse_textureN)
+		glActiveTexture(GL_TEXTURE + i);
 		{
 			std::string number;
 			std::string name = textures[i].type;
@@ -89,12 +83,11 @@ void Mesh::Draw(Shader& shader)
 			else if (name == "texture_specular")
 				number = std::to_string(specularNr++);
 
-			shader.SetUniformFloat((name + number).c_str(), i);
+			shader.SetFloat((name + number).c_str(), i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 		glActiveTexture(GL_TEXTURE0);
 
-		// draw mesh
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

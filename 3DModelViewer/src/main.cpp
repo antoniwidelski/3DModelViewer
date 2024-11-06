@@ -1,5 +1,4 @@
 #include "Core/Application.h"
-
 #include "vendor/stb_image.h"
 
 int main()

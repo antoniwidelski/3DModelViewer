@@ -151,6 +151,7 @@
     <ClCompile Include="src\Core\Application.h" />
     <ClCompile Include="src\Core\Camera.cpp" />
     <ClCompile Include="src\Core\Common.cpp" />
+    <ClCompile Include="src\Core\Layers\RenderLayer.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
@@ -162,11 +163,14 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="src\Core\Camera.h" />
     <ClInclude Include="src\Core\Common.h" />
+    <ClInclude Include="src\Core\Layers\Layer.h" />
+    <ClInclude Include="src\Core\Layers\RenderLayer.h" />
     <ClInclude Include="src\Graphics\Mesh.h" />
     <ClInclude Include="src\Graphics\Model.h" />
     <ClInclude Include="src\Graphics\Renderer.h" />
     <ClInclude Include="src\Graphics\Shader.h" />
     <ClInclude Include="src\Core\Window.h" />
+    <ClInclude Include="src\Graphics\Light.h" />
     <ClInclude Include="src\vendor\stb_image.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
   </ItemGroup>

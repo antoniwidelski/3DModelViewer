@@ -17,9 +17,11 @@ public:
 	inline void Use() const { glUseProgram(m_ID); }
 	inline unsigned int GetID() const { return m_ID; }
 
-	void SetUniformMat4(const std::string& name, glm::mat4 mat) const;
-	void SetUniformFloat(const std::string& name, float value) const;
-	void SetUniformInt(const std::string& name, int value) const;
+	void SetMat4(const std::string& name, glm::mat4 mat) const;
+	void SetVec3(const std::string& name, glm::vec3 vec) const;
+	void SetVec3(const std::string& name, float x, float y, float z) const;
+	void SetFloat(const std::string& name, float value) const;
+	void SetInt(const std::string& name, int value) const;
 
 private:
 	unsigned int CreateShader(const char* source, GLenum shaderType);

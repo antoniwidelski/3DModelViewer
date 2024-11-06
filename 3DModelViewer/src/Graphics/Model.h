@@ -75,11 +75,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<unsigned int> indices;
 	std::vector<Tex> textures;
 
+	// process vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
 
-		// process vertex positions, normals and texture coordinates
 		glm::vec3 vector;
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
@@ -91,7 +91,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vector.z = mesh->mNormals[i].z;
 		vertex.Normal = vector;
 
-		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+		if (mesh->mTextureCoords[0])
 		{
 			glm::vec2 vec;
 			vec.x = mesh->mTextureCoords[0][i].x;

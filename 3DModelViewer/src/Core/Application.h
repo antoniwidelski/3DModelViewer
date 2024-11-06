@@ -22,7 +22,6 @@ public:
 
 	void Run();
 
-	
 private:
 	Window* m_Window;
 	Camera m_Camera;
