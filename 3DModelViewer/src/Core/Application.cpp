@@ -45,16 +45,16 @@ void Application::Run()
 	std::string fPath = "res/shader.fs";
 	Shader shader(vPath, fPath);	
 
-	Model _model((char*)"res/backpack/backpack.obj");
+	Model _model((char*)"res/cyborg/cyborg.obj");
 
 	shader.Use();
 	glm::mat4 projection = glm::perspective(m_Camera.GetFOV(), m_Window->GetAspect(), 0.1f, 100.0f);
 	shader.SetMat4("projection", projection);
 
 	glm::vec3 lightDir(-0.2f, -1.0f, -0.3f);
-	glm::vec3 ambient(0.2f, 0.2f, 0.2f);
-	glm::vec3 diffuse(0.5f, 0.5f, 0.5f);
-	glm::vec3 specular(1.0f, 1.0f, 1.0f);
+	glm::vec3 ambient(0.5f, 0.5f, 0.5f);
+	glm::vec3 diffuse(0.8f, 0.8f, 0.8f);
+	glm::vec3 specular(2.0f, 2.0f, 2.0f);
 	Light light(lightDir, ambient, diffuse, specular);
 
 	Renderer renderer;
