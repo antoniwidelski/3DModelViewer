@@ -1,8 +1,8 @@
 #include "Common.h"
 
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
 
 std::vector<float> vertices = {
     // positions          // colors           // texture coords

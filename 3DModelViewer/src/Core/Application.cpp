@@ -45,7 +45,7 @@ void Application::Run()
 	std::string fPath = "res/shader.fs";
 	Shader shader(vPath, fPath);	
 
-	Model _model((char*)"res/cyborg/cyborg.obj");
+	Model _model((char*)"res/backpack/backpack.obj");
 
 	shader.Use();
 	glm::mat4 projection = glm::perspective(m_Camera.GetFOV(), m_Window->GetAspect(), 0.1f, 100.0f);
