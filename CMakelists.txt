@@ -1,0 +1,56 @@
+cmake_minimum_required(VERSION 3.15)
+
+project(3DModelViewer)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+file(GLOB_RECURSE SOURCES src/**/*.cpp src/**/*.h)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
+    FILES ${HEADERS} ${SOURCES}
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+add_definitions(-DRESOURCE_PATH="${CMAKE_SOURCE_DIR}/res/")
+
+set(DEPS_INCLUDE_DIR "${CMAKE_SOURC_DIR}/dependencies/include")
+set(DEPS_LIB_DIR "${CMAKE_SOURC_DIR}/dependencies/lib")
+
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/dependencies/include
+    ${CMAKE_SOURCE_DIR}/dependencies/include/glad
+    ${CMAKE_SOURCE_DIR}/dependencies/include/GLFW
+    ${CMAKE_SOURCE_DIR}/dependencies/include/glm
+)
+
+link_directories(${DEPS_LIB_DIR})
+
+target_link_libraries(${PROJECT_NAME}
+	${CMAKE_SOURCE_DIR}/dependencies/lib/assimp-vc143-mtd.lib
+	${CMAKE_SOURCE_DIR}/dependencies/lib/glfw3.lib
+)
+
+add_library(glad STATIC "${CMAKE_SOURCE_DIR}/dependencies/include/glad/glad.c")
+target_include_directories(glad PUBLIC "${CMAKE_SOURCE_DIR}/dependencies/include")
+target_link_libraries(${PROJECT_NAME} glad)
+
+set(ASSIMP_LIB "${CMAKE_SOURCE_DIR}/dependencies/lib/assimp-vc143-mtd.lib")
+target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIB})
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE ASSIMP_BUILD_NO_EXPORT)
+
+# Define the path to the DLL and the destination
+set(ASSIMP_DLL ${CMAKE_SOURCE_DIR}/dependencies/bin/assimp-vc143-mtd.dll)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})  # Or specify your build folder like Debug/Release
+
+# Add the custom command to copy the DLL after building the project
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${ASSIMP_DLL} $<TARGET_FILE_DIR:${PROJECT_NAME}>/assimp-vc143-mtd.dll
+)
+
+if(WIN32)
+	target_link_libraries(${PROJECT_NAME} opengl32)
+endif()
