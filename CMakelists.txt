@@ -41,11 +41,9 @@ target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIB})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE ASSIMP_BUILD_NO_EXPORT)
 
-# Define the path to the DLL and the destination
 set(ASSIMP_DLL ${CMAKE_SOURCE_DIR}/dependencies/bin/assimp-vc143-mtd.dll)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})  # Or specify your build folder like Debug/Release
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}) 
 
-# Add the custom command to copy the DLL after building the project
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${ASSIMP_DLL} $<TARGET_FILE_DIR:${PROJECT_NAME}>/assimp-vc143-mtd.dll
